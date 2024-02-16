@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "B0410F35-D754-4504-9F10-BBF0309DA19F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ZapLink.xcodeproj",
+          "identifier" : "8D9DDF332B7D75A10000C661",
+          "name" : "ZapLink"
+        }
+      ]
+    },
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ZapLink.xcodeproj",
+      "identifier" : "8D9DDF332B7D75A10000C661",
+      "name" : "ZapLink"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ZapLink.xcodeproj",
+        "identifier" : "8D9DDF442B7D75A70000C661",
+        "name" : "ZapLinkTests"
+      }
+    }
+  ],
+  "version" : 1
+}

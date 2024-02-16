@@ -1,17 +1,24 @@
-//
-//  ZapLinkApp.swift
-//  ZapLink
-//
-//  Created by Marcos Santos on 14/02/24.
-//
-
+import ComposableArchitecture
 import SwiftUI
 
 @main
 struct ZapLinkApp: App {
+
+    private let store: StoreOf<PhoneFeature>
+
+    init() {
+        self.store = Store(initialState: PhoneFeature.State()) {
+            PhoneFeature()
+        }
+
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            .foregroundColor: UIColor(named: "AccentColor")!
+        ]
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PhoneView(store: store)
         }
     }
 }
