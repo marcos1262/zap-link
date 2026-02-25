@@ -76,6 +76,9 @@ struct PhoneView: View {
             }
             .navigationTitle("Zap Link")
         }
+        .onAppear {
+            store.send(.scenePhaseUpdated)
+        }
         .onChange(of: scenePhase) { _ in
             store.send(.scenePhaseUpdated)
         }
