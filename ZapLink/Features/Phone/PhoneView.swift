@@ -12,7 +12,7 @@ struct PhoneView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Image("background")
                     .resizable()
