@@ -31,10 +31,6 @@ struct PhoneView: View {
                             TextField("Type a phone number", text: $store.phoneNumber)
                                 .textFieldStyle(CustomTextFieldStyle())
                                 .keyboardType(.phonePad)
-                                .submitLabel(.continue)
-                                .onSubmit {
-                                    store.send(.textFieldSubmitted)
-                                }
 
                             Button(action: {
                                 store.send(.pasteButtonTapped)
