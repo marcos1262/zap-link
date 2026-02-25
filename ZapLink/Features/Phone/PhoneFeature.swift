@@ -22,6 +22,19 @@ struct PhoneFeature {
         case scenePhaseUpdated
     }
 
+    private static func sanitizedDigits(from rawPhoneNumber: String) -> String {
+        let digits = rawPhoneNumber.unicodeScalars.filter { scalar in
+            (48...57).contains(scalar.value)
+        }
+        return String(String.UnicodeScalarView(digits))
+    }
+
+    private static func whatsAppURL(from rawPhoneNumber: String) -> URL? {
+        let digits = Self.sanitizedDigits(from: rawPhoneNumber)
+        guard !digits.isEmpty else { return nil }
+        return URL(string: "https://wa.me/" + digits)
+    }
+
     var body: some ReducerOf<Self> {
         BindingReducer()
 
@@ -40,7 +53,7 @@ struct PhoneFeature {
                 return .none
             case .openButtonTapped:
                 return .run { [state] _ in
-                    guard let url = URL(string: "https://wa.me/" + state.phoneNumber) else { return }
+                    guard let url = Self.whatsAppURL(from: state.phoneNumber) else { return }
                     await openURL(url)
                 }
             case .scenePhaseUpdated:

@@ -46,7 +46,7 @@ final class PhoneFeatureTests: XCTestCase {
 
         await store.receive(.openButtonTapped)
 
-        XCTAssertEqual(urlParameters, [URL(string: "https://wa.me/+55")])
+        XCTAssertEqual(urlParameters, [URL(string: "https://wa.me/55")!])
     }
 
     func test_pasteButtonTapped_when_stringIsNil() async {
@@ -64,7 +64,48 @@ final class PhoneFeatureTests: XCTestCase {
     func test_openButtonTapped_when_urlIsValid() async {
         await store.send(.openButtonTapped)
 
-        XCTAssertEqual(urlParameters, [URL(string: "https://wa.me/+55")])
+        XCTAssertEqual(urlParameters, [URL(string: "https://wa.me/55")!])
+    }
+
+    func test_openButtonTapped_sanitizesFormattingCharacters() async {
+        await store.send(.set(\.phoneNumber, "+55 (11) 99999-9999")) {
+            $0.phoneNumber = "+55 (11) 99999-9999"
+        }
+
+        await store.send(.openButtonTapped)
+
+        XCTAssertEqual(urlParameters, [URL(string: "https://wa.me/5511999999999")!])
+    }
+
+    func test_openButtonTapped_ignoresWhitespaceAndSymbols() async {
+        await store.send(.set(\.phoneNumber, "  +55-11 98888 7777  ")) {
+            $0.phoneNumber = "  +55-11 98888 7777  "
+        }
+
+        await store.send(.openButtonTapped)
+
+        XCTAssertEqual(urlParameters, [URL(string: "https://wa.me/5511988887777")!])
+    }
+
+    func test_openButtonTapped_whenNoDigits_doesNotOpenURL() async {
+        await store.send(.set(\.phoneNumber, "()+ -")) {
+            $0.phoneNumber = "()+ -"
+        }
+
+        await store.send(.openButtonTapped)
+
+        XCTAssertEqual(urlParameters, [])
+    }
+
+    func test_textFieldSubmitted_usesSanitizedOpenBehavior() async {
+        await store.send(.set(\.phoneNumber, "+55 (11) 91234-5678")) {
+            $0.phoneNumber = "+55 (11) 91234-5678"
+        }
+
+        await store.send(.textFieldSubmitted)
+        await store.receive(.openButtonTapped)
+
+        XCTAssertEqual(urlParameters, [URL(string: "https://wa.me/5511912345678")!])
     }
 
     func test_scenePhaseUpdated() async {
