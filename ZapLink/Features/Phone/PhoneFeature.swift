@@ -12,6 +12,14 @@ struct PhoneFeature {
     struct State: Equatable {
         var phoneNumber: String = "+55"
         var isPasteEnabled: Bool = false
+
+        var isOpenEnabled: Bool {
+            PhoneFeature.whatsAppURL(from: phoneNumber) != nil
+        }
+
+        var validationMessage: String? {
+            isOpenEnabled ? nil : "Enter a valid phone number"
+        }
     }
 
     enum Action: Equatable, BindableAction {

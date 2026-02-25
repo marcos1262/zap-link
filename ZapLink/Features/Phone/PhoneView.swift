@@ -54,6 +54,13 @@ struct PhoneView: View {
                             }
                             .disabled(!store.isPasteEnabled)
                         }
+
+                        if let validationMessage = store.validationMessage {
+                            Text(validationMessage)
+                                .font(.footnote)
+                                .foregroundStyle(.red)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
 
                     Button("Open") {
@@ -67,6 +74,8 @@ struct PhoneView: View {
                         RoundedRectangle(cornerRadius: 16)
                             .fill(Color("AccentColor"))
                     )
+                    .opacity(store.isOpenEnabled ? 1 : 0.6)
+                    .disabled(!store.isOpenEnabled)
                 }
                 .padding()
             }

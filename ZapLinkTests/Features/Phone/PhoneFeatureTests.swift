@@ -33,6 +33,8 @@ final class PhoneFeatureTests: XCTestCase {
     func test_initialState() {
         XCTAssertEqual(store.state, PhoneFeature.State(phoneNumber: "+55",
                                                        isPasteEnabled: false))
+        XCTAssertTrue(store.state.isOpenEnabled)
+        XCTAssertNil(store.state.validationMessage)
     }
 
     func test_setBinding() async {
@@ -97,6 +99,16 @@ final class PhoneFeatureTests: XCTestCase {
         XCTAssertEqual(urlParameters, [])
     }
 
+    func test_openButtonTapped_whenEmptyString_doesNotOpenURL() async {
+        await store.send(.set(\.phoneNumber, "")) {
+            $0.phoneNumber = ""
+        }
+
+        await store.send(.openButtonTapped)
+
+        XCTAssertEqual(urlParameters, [])
+    }
+
     func test_textFieldSubmitted_usesSanitizedOpenBehavior() async {
         await store.send(.set(\.phoneNumber, "+55 (11) 91234-5678")) {
             $0.phoneNumber = "+55 (11) 91234-5678"
@@ -121,5 +133,38 @@ final class PhoneFeatureTests: XCTestCase {
         await store.send(.scenePhaseUpdated) {
             $0.isPasteEnabled = true
         }
+    }
+
+    func test_scenePhaseUpdated_disablesPaste_whenPasteboardHasNoString() async {
+        pasteboardMock.hasString = true
+
+        await store.send(.scenePhaseUpdated) {
+            $0.isPasteEnabled = true
+        }
+
+        pasteboardMock.hasString = false
+        pasteboardMock.string = "1234"
+
+        await store.send(.scenePhaseUpdated) {
+            $0.isPasteEnabled = false
+        }
+    }
+
+    func test_validationState_whenNoDigits_isInvalid() async {
+        await store.send(.set(\.phoneNumber, "()- +")) {
+            $0.phoneNumber = "()- +"
+        }
+
+        XCTAssertFalse(store.state.isOpenEnabled)
+        XCTAssertEqual(store.state.validationMessage, "Enter a valid phone number")
+    }
+
+    func test_validationState_whenFormattedDigits_isValid() async {
+        await store.send(.set(\.phoneNumber, "+55 (11) 90000-0000")) {
+            $0.phoneNumber = "+55 (11) 90000-0000"
+        }
+
+        XCTAssertTrue(store.state.isOpenEnabled)
+        XCTAssertNil(store.state.validationMessage)
     }
 }

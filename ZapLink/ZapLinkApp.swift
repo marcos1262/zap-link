@@ -11,8 +11,9 @@ struct ZapLinkApp: App {
             PhoneFeature()
         }
 
+        let accentColor = UIColor(named: "AccentColor") ?? .systemGreen
         UINavigationBar.appearance().largeTitleTextAttributes = [
-            .foregroundColor: UIColor(named: "AccentColor")!
+            .foregroundColor: accentColor
         ]
     }
 
