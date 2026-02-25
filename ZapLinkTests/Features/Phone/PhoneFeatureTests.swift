@@ -113,4 +113,13 @@ final class PhoneFeatureTests: XCTestCase {
             $0.isPasteEnabled = true
         }
     }
+
+    func test_scenePhaseUpdated_usesPasteboardHasStringProperty() async {
+        pasteboardMock.string = nil
+        pasteboardMock.hasString = true
+
+        await store.send(.scenePhaseUpdated) {
+            $0.isPasteEnabled = true
+        }
+    }
 }

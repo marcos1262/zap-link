@@ -3,6 +3,7 @@ import Dependencies
 
 protocol PasteboardProtocol {
     var string: String? { get }
+    var hasString: Bool { get }
 }
 
 extension PasteboardProtocol {
@@ -11,7 +12,11 @@ extension PasteboardProtocol {
     }
 }
 
-extension UIPasteboard: PasteboardProtocol {}
+extension UIPasteboard: PasteboardProtocol {
+    var hasString: Bool {
+        hasStrings
+    }
+}
 
 enum PasteboardKey: DependencyKey {
     static let liveValue: any PasteboardProtocol = UIPasteboard()
