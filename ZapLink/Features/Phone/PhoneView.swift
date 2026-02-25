@@ -23,19 +23,19 @@ struct PhoneView: View {
 
                 VStack(spacing: 32) {
                     VStack(spacing: 16) {
-                        Text("Enter the phone number:")
+                        Text("Digite o número de telefone:")
                             .font(.title2)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         HStack {
-                            TextField("Type a phone number", text: $store.phoneNumber)
+                            TextField("Digite um número de telefone", text: $store.phoneNumber)
                                 .textFieldStyle(CustomTextFieldStyle())
                                 .keyboardType(.phonePad)
 
                             Button(action: {
                                 store.send(.pasteButtonTapped)
                             }) {
-                                Label("Paste", systemImage: "doc.on.clipboard")
+                                Label("Colar", systemImage: "doc.on.clipboard")
                                     .foregroundColor(store.isPasteEnabled ?
                                                      Color("AccentColor") :
                                                         Color("AccentColor").opacity(0.5))
@@ -55,15 +55,15 @@ struct PhoneView: View {
                             .disabled(!store.isPasteEnabled)
                         }
 
-                        if let validationMessage = store.validationMessage {
-                            Text(validationMessage)
+                        if store.shouldShowValidationError {
+                            Text("Digite um número de telefone válido")
                                 .font(.footnote)
                                 .foregroundStyle(.red)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
 
-                    Button("Open") {
+                    Button("Abrir") {
                         store.send(.openButtonTapped)
                     }
                     .font(.title2)

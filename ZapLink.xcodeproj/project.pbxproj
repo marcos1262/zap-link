@@ -11,6 +11,7 @@
 		8D3FA94C2B7FD63C00F659F0 /* PhoneFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FA94B2B7FD63C00F659F0 /* PhoneFeature.swift */; };
 		8D3FA94E2B7FD83900F659F0 /* PasteboardProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FA94D2B7FD83900F659F0 /* PasteboardProtocol.swift */; };
 		8D8368F92B7EA66800C09405 /* CustomTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8368F82B7EA66800C09405 /* CustomTextFieldStyle.swift */; };
+		B37A2F6F80214A6D8B2F9011 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = B37A2F6F80214A6D8B2F9010 /* Localizable.xcstrings */; };
 		8D9DDF382B7D75A10000C661 /* ZapLinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9DDF372B7D75A10000C661 /* ZapLinkApp.swift */; };
 		8D9DDF3A2B7D75A10000C661 /* PhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9DDF392B7D75A10000C661 /* PhoneView.swift */; };
 		8D9DDF3C2B7D75A60000C661 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D9DDF3B2B7D75A60000C661 /* Assets.xcassets */; };
@@ -34,6 +35,7 @@
 		8D3FA94D2B7FD83900F659F0 /* PasteboardProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardProtocol.swift; sourceTree = "<group>"; };
 		8D8368F82B7EA66800C09405 /* CustomTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldStyle.swift; sourceTree = "<group>"; };
 		8D8368FA2B7EB99400C09405 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B37A2F6F80214A6D8B2F9010 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		8D9DDF342B7D75A10000C661 /* ZapLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZapLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D9DDF372B7D75A10000C661 /* ZapLinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZapLinkApp.swift; sourceTree = "<group>"; };
 		8D9DDF392B7D75A10000C661 /* PhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneView.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				8D8368FA2B7EB99400C09405 /* Info.plist */,
+				B37A2F6F80214A6D8B2F9010 /* Localizable.xcstrings */,
 				8D9DDF3B2B7D75A60000C661 /* Assets.xcassets */,
 				8D9DDF3D2B7D75A60000C661 /* ZapLink.entitlements */,
 				8D9DDF3E2B7D75A60000C661 /* Preview Content */,
@@ -243,9 +246,10 @@
 			};
 			buildConfigurationList = 8D9DDF2F2B7D75A00000C661 /* Build configuration list for PBXProject "ZapLink" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = "pt-BR";
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				"pt-BR",
 				en,
 				Base,
 			);
@@ -268,6 +272,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B37A2F6F80214A6D8B2F9011 /* Localizable.xcstrings in Resources */,
 				8D9DDF402B7D75A60000C661 /* Preview Assets.xcassets in Resources */,
 				8D9DDF3C2B7D75A60000C661 /* Assets.xcassets in Resources */,
 			);

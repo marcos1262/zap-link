@@ -34,7 +34,7 @@ final class PhoneFeatureTests: XCTestCase {
         XCTAssertEqual(store.state, PhoneFeature.State(phoneNumber: "+55",
                                                        isPasteEnabled: false))
         XCTAssertTrue(store.state.isOpenEnabled)
-        XCTAssertNil(store.state.validationMessage)
+        XCTAssertFalse(store.state.shouldShowValidationError)
     }
 
     func test_setBinding() async {
@@ -156,7 +156,7 @@ final class PhoneFeatureTests: XCTestCase {
         }
 
         XCTAssertFalse(store.state.isOpenEnabled)
-        XCTAssertEqual(store.state.validationMessage, "Enter a valid phone number")
+        XCTAssertTrue(store.state.shouldShowValidationError)
     }
 
     func test_validationState_whenFormattedDigits_isValid() async {
@@ -165,6 +165,6 @@ final class PhoneFeatureTests: XCTestCase {
         }
 
         XCTAssertTrue(store.state.isOpenEnabled)
-        XCTAssertNil(store.state.validationMessage)
+        XCTAssertFalse(store.state.shouldShowValidationError)
     }
 }

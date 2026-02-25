@@ -17,8 +17,8 @@ struct PhoneFeature {
             PhoneFeature.whatsAppURL(from: phoneNumber) != nil
         }
 
-        var validationMessage: String? {
-            isOpenEnabled ? nil : "Enter a valid phone number"
+        var shouldShowValidationError: Bool {
+            !isOpenEnabled
         }
     }
 
