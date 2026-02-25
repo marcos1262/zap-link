@@ -51,6 +51,7 @@ struct PhoneView: View {
                                         RoundedRectangle(cornerRadius: 16)
                                             .fill(.background)
                                     )
+                                    .contentShape(RoundedRectangle(cornerRadius: 16))
                             }
                             .disabled(!store.isPasteEnabled)
                         }
@@ -63,17 +64,20 @@ struct PhoneView: View {
                         }
                     }
 
-                    Button("Abrir") {
+                    Button {
                         store.send(.openButtonTapped)
+                    } label: {
+                        Text("Abrir")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                            .padding(16)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color("AccentColor"))
+                            )
+                            .contentShape(RoundedRectangle(cornerRadius: 16))
                     }
-                    .font(.title2)
-                    .foregroundColor(.white)
-                    .padding(16)
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color("AccentColor"))
-                    )
                     .opacity(store.isOpenEnabled ? 1 : 0.6)
                     .disabled(!store.isOpenEnabled)
                 }
