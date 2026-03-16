@@ -1,11 +1,6 @@
 # ZapLink
 
-<img src="https://img.shields.io/badge/Swift-5-orange?style=for-the-badge&logo=swift&logoColor=white" alt="Swift badge">
-<img src="https://img.shields.io/badge/iOS-16.6%2B-black?style=for-the-badge&logo=apple&logoColor=white" alt="iOS badge">
-<img src="https://img.shields.io/badge/SwiftUI-Native-blue?style=for-the-badge" alt="SwiftUI badge">
-<img src="https://img.shields.io/badge/TCA-PointFree-5A67D8?style=for-the-badge" alt="TCA badge">
-<img src="https://img.shields.io/badge/Localization-pt--BR%20%7C%20en-0A9F5A?style=for-the-badge" alt="Localization badge">
-<img src="https://img.shields.io/badge/Code%20Coverage-98%25-2EA44F?style=for-the-badge" alt="Coverage badge">
+<img src="https://img.shields.io/badge/Swift-5-orange?style=for-the-badge&logo=swift&logoColor=white" alt="Swift badge"> <img src="https://img.shields.io/badge/iOS-16.6%2B-black?style=for-the-badge&logo=apple&logoColor=white" alt="iOS badge"> <img src="https://img.shields.io/badge/SwiftUI-Native-blue?style=for-the-badge" alt="SwiftUI badge"> <img src="https://img.shields.io/badge/TCA-PointFree-5A67D8?style=for-the-badge" alt="TCA badge"> <img src="https://img.shields.io/badge/Localization-pt--BR%20%7C%20en-0A9F5A?style=for-the-badge" alt="Localization badge"> <img src="https://img.shields.io/badge/Code%20Coverage-98%25-2EA44F?style=for-the-badge" alt="Coverage badge">
 
 > Native iOS app built with SwiftUI + TCA to open a WhatsApp chat from a phone number without saving the contact first.
 >
