@@ -30,9 +30,18 @@ final class PhoneFeatureTests: XCTestCase {
         }
     }
 
+    func test_livePasteboardDependency_usesGeneralPasteboard() {
+        let livePasteboard = PasteboardKey.liveValue as? UIPasteboard
+
+        XCTAssertTrue(livePasteboard === UIPasteboard.general)
+    }
+
     func test_initialState() {
         XCTAssertEqual(store.state, PhoneFeature.State(phoneNumber: "+55",
-                                                       isPasteEnabled: false))
+                                                       isPasteEnabled: false,
+                                                       isClipboardImportPromptVisible: false,
+                                                       lastHandledPasteboardChangeCount: nil,
+                                                       clipboardImportCandidate: nil))
         XCTAssertTrue(store.state.isOpenEnabled)
         XCTAssertFalse(store.state.shouldShowValidationError)
     }
@@ -60,6 +69,8 @@ final class PhoneFeatureTests: XCTestCase {
     func test_pasteButtonTapped_when_thereIsString() async {
         await store.send(.pasteButtonTapped) {
             $0.phoneNumber = "+551234"
+            $0.isClipboardImportPromptVisible = false
+            $0.lastHandledPasteboardChangeCount = 1
         }
     }
 
@@ -124,6 +135,10 @@ final class PhoneFeatureTests: XCTestCase {
         await store.send(.scenePhaseUpdated) {
             $0.isPasteEnabled = true
         }
+        await store.receive(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
     }
 
     func test_scenePhaseUpdated_usesPasteboardHasStringProperty() async {
@@ -133,6 +148,10 @@ final class PhoneFeatureTests: XCTestCase {
         await store.send(.scenePhaseUpdated) {
             $0.isPasteEnabled = true
         }
+        await store.receive(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
     }
 
     func test_scenePhaseUpdated_disablesPaste_whenPasteboardHasNoString() async {
@@ -141,12 +160,112 @@ final class PhoneFeatureTests: XCTestCase {
         await store.send(.scenePhaseUpdated) {
             $0.isPasteEnabled = true
         }
+        await store.receive(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
 
         pasteboardMock.hasString = false
         pasteboardMock.string = "1234"
+        pasteboardMock.detectedImportCandidate = nil
+        pasteboardMock.changeCount = 2
 
         await store.send(.scenePhaseUpdated) {
             $0.isPasteEnabled = false
+        }
+        await store.receive(.clipboardDetectionFinished(importedValue: nil, changeCount: 2)) {
+            $0.isClipboardImportPromptVisible = false
+            $0.clipboardImportCandidate = nil
+        }
+    }
+
+    func test_clipboardDetectionFinished_showsPromptWhenRelevant() async {
+        await store.send(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
+    }
+
+    func test_clipboardPromptTapped_importsClipboardValue() async {
+        await store.send(.clipboardDetectionFinished(importedValue: "+5511988887777", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+5511988887777"
+        }
+
+        await store.send(.clipboardImportPromptTapped) {
+            $0.phoneNumber = "+5511988887777"
+            $0.isClipboardImportPromptVisible = false
+            $0.lastHandledPasteboardChangeCount = 1
+            $0.clipboardImportCandidate = nil
+        }
+    }
+
+    func test_clipboardPromptDismissed_hidesPrompt() async {
+        await store.send(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
+
+        await store.send(.clipboardImportPromptDismissed) {
+            $0.isClipboardImportPromptVisible = false
+            $0.lastHandledPasteboardChangeCount = 1
+            $0.clipboardImportCandidate = nil
+        }
+    }
+
+    func test_scenePhaseUpdated_doesNotRepeatPromptForSameClipboardAfterDismiss() async {
+        await store.send(.scenePhaseUpdated) {
+            $0.isPasteEnabled = true
+        }
+        await store.receive(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
+        await store.send(.clipboardImportPromptDismissed) {
+            $0.isClipboardImportPromptVisible = false
+            $0.lastHandledPasteboardChangeCount = 1
+            $0.clipboardImportCandidate = nil
+        }
+        await store.send(.scenePhaseUpdated)
+        await store.receive(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1))
+    }
+
+    func test_scenePhaseUpdated_repeatsPromptWhenClipboardChanges() async {
+        await store.send(.scenePhaseUpdated) {
+            $0.isPasteEnabled = true
+        }
+        await store.receive(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
+        await store.send(.clipboardImportPromptDismissed) {
+            $0.isClipboardImportPromptVisible = false
+            $0.lastHandledPasteboardChangeCount = 1
+            $0.clipboardImportCandidate = nil
+        }
+
+        pasteboardMock.changeCount = 2
+
+        await store.send(.scenePhaseUpdated)
+        await store.receive(.clipboardDetectionFinished(importedValue: "+551234", changeCount: 2)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+551234"
+        }
+    }
+
+    func test_clipboardDetectionFinished_hidesPromptWhenCandidateMatchesCurrentField() async {
+        await store.send(.set(\.phoneNumber, "+55 (11) 98888-7777")) {
+            $0.phoneNumber = "+55 (11) 98888-7777"
+        }
+
+        await store.send(.clipboardDetectionFinished(importedValue: "+5511912345678", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = true
+            $0.clipboardImportCandidate = "+5511912345678"
+        }
+
+        await store.send(.clipboardDetectionFinished(importedValue: "+5511988887777", changeCount: 1)) {
+            $0.isClipboardImportPromptVisible = false
+            $0.clipboardImportCandidate = nil
         }
     }
 

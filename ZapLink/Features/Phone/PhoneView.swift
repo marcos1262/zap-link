@@ -23,19 +23,19 @@ struct PhoneView: View {
 
                 VStack(spacing: 32) {
                     VStack(spacing: 16) {
-                        Text("Digite o número de telefone:")
+                        Text(String(localized: "Digite o número de telefone:"))
                             .font(.title2)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         HStack {
-                            TextField("Digite um número de telefone", text: $store.phoneNumber)
+                            TextField(String(localized: "Digite um número de telefone"), text: $store.phoneNumber)
                                 .textFieldStyle(CustomTextFieldStyle())
                                 .keyboardType(.phonePad)
 
                             Button(action: {
                                 store.send(.pasteButtonTapped)
                             }) {
-                                Label("Colar", systemImage: "doc.on.clipboard")
+                                Label(String(localized: "Colar"), systemImage: "doc.on.clipboard")
                                     .foregroundColor(store.isPasteEnabled ?
                                                      Color("AccentColor") :
                                                         Color("AccentColor").opacity(0.5))
@@ -56,8 +56,46 @@ struct PhoneView: View {
                             .disabled(!store.isPasteEnabled)
                         }
 
+                        if store.isClipboardImportPromptVisible {
+                            HStack(alignment: .top, spacing: 12) {
+                                Image(systemName: "doc.on.clipboard")
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                                    .padding(.top, 2)
+
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(String(localized: "Número encontrado na área de transferência"))
+                                        .font(.footnote)
+                                        .foregroundStyle(.secondary)
+
+                                    HStack(spacing: 10) {
+                                        Button(String(localized: "Importar")) {
+                                            store.send(.clipboardImportPromptTapped)
+                                        }
+                                        .font(.footnote.weight(.semibold))
+                                        .buttonStyle(.borderedProminent)
+                                        .controlSize(.regular)
+
+                                        Button(String(localized: "Agora não")) {
+                                            store.send(.clipboardImportPromptDismissed)
+                                        }
+                                        .font(.footnote)
+                                        .buttonStyle(.bordered)
+                                        .controlSize(.regular)
+                                        .tint(.secondary)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .padding(12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .fill(Color("AccentColor").opacity(0.08))
+                            )
+                        }
+
                         if store.shouldShowValidationError {
-                            Text("Digite um número de telefone válido")
+                            Text(String(localized: "Digite um número de telefone válido"))
                                 .font(.footnote)
                                 .foregroundStyle(.red)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -67,7 +105,7 @@ struct PhoneView: View {
                     Button {
                         store.send(.openButtonTapped)
                     } label: {
-                        Text("Abrir")
+                        Text(String(localized: "Abrir"))
                             .font(.title2)
                             .foregroundColor(.white)
                             .padding(16)
@@ -83,7 +121,7 @@ struct PhoneView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Zap Link")
+            .navigationTitle(String(localized: "Zap Link"))
         }
         .onAppear {
             store.send(.scenePhaseUpdated)

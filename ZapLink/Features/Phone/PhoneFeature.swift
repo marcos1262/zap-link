@@ -12,9 +12,12 @@ struct PhoneFeature {
     struct State: Equatable {
         var phoneNumber: String = "+55"
         var isPasteEnabled: Bool = false
+        var isClipboardImportPromptVisible: Bool = false
+        var lastHandledPasteboardChangeCount: Int?
+        var clipboardImportCandidate: String?
 
         var isOpenEnabled: Bool {
-            PhoneFeature.whatsAppURL(from: phoneNumber) != nil
+            LinkImportParser.whatsAppURL(from: phoneNumber) != nil
         }
 
         var shouldShowValidationError: Bool {
@@ -26,21 +29,11 @@ struct PhoneFeature {
         case binding(BindingAction<State>)
         case textFieldSubmitted
         case pasteButtonTapped
+        case clipboardImportPromptTapped
+        case clipboardImportPromptDismissed
         case openButtonTapped
         case scenePhaseUpdated
-    }
-
-    private static func sanitizedDigits(from rawPhoneNumber: String) -> String {
-        let digits = rawPhoneNumber.unicodeScalars.filter { scalar in
-            (48...57).contains(scalar.value)
-        }
-        return String(String.UnicodeScalarView(digits))
-    }
-
-    private static func whatsAppURL(from rawPhoneNumber: String) -> URL? {
-        let digits = Self.sanitizedDigits(from: rawPhoneNumber)
-        guard !digits.isEmpty else { return nil }
-        return URL(string: "https://wa.me/" + digits)
+        case clipboardDetectionFinished(importedValue: String?, changeCount: Int)
     }
 
     var body: some ReducerOf<Self> {
@@ -56,16 +49,48 @@ struct PhoneFeature {
                 }
             case .pasteButtonTapped:
                 if let pasteboardString = pasteboard.string {
-                    state.phoneNumber = "+55" + pasteboardString
+                    if let importedValue = LinkImportParser.importedPhoneFieldValue(from: pasteboardString) {
+                        state.phoneNumber = importedValue
+                    }
+                    state.lastHandledPasteboardChangeCount = pasteboard.changeCount
                 }
+                state.isClipboardImportPromptVisible = false
+                state.clipboardImportCandidate = nil
+                return .none
+            case .clipboardImportPromptTapped:
+                if let importedValue = state.clipboardImportCandidate {
+                    state.phoneNumber = importedValue
+                }
+                state.isClipboardImportPromptVisible = false
+                state.lastHandledPasteboardChangeCount = pasteboard.changeCount
+                state.clipboardImportCandidate = nil
+                return .none
+            case .clipboardImportPromptDismissed:
+                state.isClipboardImportPromptVisible = false
+                state.lastHandledPasteboardChangeCount = pasteboard.changeCount
+                state.clipboardImportCandidate = nil
                 return .none
             case .openButtonTapped:
                 return .run { [state] _ in
-                    guard let url = Self.whatsAppURL(from: state.phoneNumber) else { return }
+                    guard let url = LinkImportParser.whatsAppURL(from: state.phoneNumber) else { return }
                     await openURL(url)
                 }
             case .scenePhaseUpdated:
                 state.isPasteEnabled = pasteboard.hasString
+                let changeCount = pasteboard.changeCount
+                return .run { send in
+                    let importedValue = await pasteboard.detectImportCandidate()
+                    await send(.clipboardDetectionFinished(importedValue: importedValue, changeCount: changeCount))
+                }
+            case let .clipboardDetectionFinished(importedValue, changeCount):
+                let currentFieldValue = LinkImportParser.importedPhoneFieldValue(from: state.phoneNumber)
+                let shouldShowPrompt =
+                    importedValue != nil &&
+                    importedValue != currentFieldValue &&
+                    state.lastHandledPasteboardChangeCount != changeCount
+
+                state.isClipboardImportPromptVisible = shouldShowPrompt
+                state.clipboardImportCandidate = shouldShowPrompt ? importedValue : nil
                 return .none
             }
         }

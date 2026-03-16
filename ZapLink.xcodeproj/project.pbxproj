@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A7D880C2DB00A5D00112233 /* LinkImportParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7D880B2DB00A5D00112233 /* LinkImportParser.swift */; };
+		3A7D880E2DB00A7100112233 /* LinkImportParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7D880D2DB00A7100112233 /* LinkImportParserTests.swift */; };
 		8D3FA9452B7FD5AF00F659F0 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 8D3FA9442B7FD5AF00F659F0 /* ComposableArchitecture */; };
 		8D3FA94C2B7FD63C00F659F0 /* PhoneFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FA94B2B7FD63C00F659F0 /* PhoneFeature.swift */; };
 		8D3FA94E2B7FD83900F659F0 /* PasteboardProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3FA94D2B7FD83900F659F0 /* PasteboardProtocol.swift */; };
@@ -31,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A7D880B2DB00A5D00112233 /* LinkImportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkImportParser.swift; sourceTree = "<group>"; };
+		3A7D880D2DB00A7100112233 /* LinkImportParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkImportParserTests.swift; sourceTree = "<group>"; };
 		8D3FA94B2B7FD63C00F659F0 /* PhoneFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneFeature.swift; sourceTree = "<group>"; };
 		8D3FA94D2B7FD83900F659F0 /* PasteboardProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardProtocol.swift; sourceTree = "<group>"; };
 		8D8368F82B7EA66800C09405 /* CustomTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldStyle.swift; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 		8D3FA9492B7FD60D00F659F0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3A7D880B2DB00A5D00112233 /* LinkImportParser.swift */,
 				8D3FA94A2B7FD61500F659F0 /* UI */,
 			);
 			path = Utils;
@@ -171,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC558012B7FFE17003E33CB /* Doubles */,
+				3A7D880D2DB00A7100112233 /* LinkImportParserTests.swift */,
 				8D9DDF492B7D75A70000C661 /* PhoneFeatureTests.swift */,
 			);
 			path = Phone;
@@ -292,6 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7D880C2DB00A5D00112233 /* LinkImportParser.swift in Sources */,
 				8D9DDF3A2B7D75A10000C661 /* PhoneView.swift in Sources */,
 				8D3FA94E2B7FD83900F659F0 /* PasteboardProtocol.swift in Sources */,
 				8D9DDF382B7D75A10000C661 /* ZapLinkApp.swift in Sources */,
@@ -304,6 +311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7D880E2DB00A7100112233 /* LinkImportParserTests.swift in Sources */,
 				8DC558032B7FFE29003E33CB /* PasteboardMock.swift in Sources */,
 				8D9DDF4A2B7D75A70000C661 /* PhoneFeatureTests.swift in Sources */,
 			);
